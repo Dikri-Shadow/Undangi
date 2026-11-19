@@ -1,0 +1,2 @@
+const buckets = new Map<string, number[]>();
+export function allowRequest(key: string, limit = 8, windowMs = 600_000) { const now = Date.now(); const recent = (buckets.get(key) ?? []).filter((time) => now - time < windowMs); if (recent.length >= limit) return false; recent.push(now); buckets.set(key, recent); if (buckets.size > 500) for (const [bucket, times] of buckets) if (!times.some((time) => now - time < windowMs)) buckets.delete(bucket); return true; }

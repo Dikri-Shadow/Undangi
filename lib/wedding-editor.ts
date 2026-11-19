@@ -1,0 +1,1 @@
+export const wizardSteps = ["Mempelai Wanita", "Mempelai Pria", "Akad Nikah", "Resepsi", "Love Story", "Wedding Gift", "Foto", "Musik", "Informasi Tambahan", "SEO & Link", "Review & Publish"] as const;

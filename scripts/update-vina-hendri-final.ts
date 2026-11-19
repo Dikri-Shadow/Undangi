@@ -1,0 +1,21 @@
+import { weddingConfig } from "../data/wedding-config";
+import type { WeddingConfig } from "../types/wedding";
+
+const url = (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL)?.replace(/\/$/, "");
+const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+if (!url || !key) throw new Error("Supabase server environment belum dikonfigurasi.");
+const headers = { apikey: key, Authorization: `Bearer ${key}`, "Content-Type": "application/json" };
+const lookup = await fetch(`${url}/rest/v1/weddings?slug=eq.vina-hendri&deleted_at=is.null&select=id,wedding_data,status`, { headers, cache: "no-store" });
+if (!lookup.ok) throw new Error(`Lookup gagal (${lookup.status}).`);
+const rows = await lookup.json() as { id: string; wedding_data: WeddingConfig; status: "draft" | "published" }[];
+if (rows.length !== 1) throw new Error(`Update dibatalkan: record aktif vina-hendri harus tepat 1, ditemukan ${rows.length}.`);
+const existing = rows[0];
+const finalData: WeddingConfig = { ...structuredClone(weddingConfig), assets: existing.wedding_data.assets, gallery: existing.wedding_data.gallery, music: existing.wedding_data.music, theme: existing.wedding_data.theme };
+finalData.slug = "vina-hendri";
+finalData.music = { ...existing.wedding_data.music, enabled: true, src: "/audio/bernaung.mp3", title: "Bernaung", artist: "Feby Putri", loop: true };
+const body = { slug: "vina-hendri", bride_name: finalData.bride.shortName, bride_full_name: finalData.bride.fullName, groom_name: finalData.groom.shortName, groom_full_name: finalData.groom.fullName, wedding_data: finalData, updated_at: new Date().toISOString(), updated_by: "final-data-script" };
+const update = await fetch(`${url}/rest/v1/weddings?id=eq.${encodeURIComponent(existing.id)}&select=id,slug,status`, { method: "PATCH", headers: { ...headers, Prefer: "return=representation" }, body: JSON.stringify(body) });
+if (!update.ok) throw new Error(`Update gagal (${update.status}).`);
+const updated = await update.json() as { id: string; slug: string; status: string }[];
+if (updated.length !== 1 || updated[0].slug !== "vina-hendri") throw new Error("Verifikasi update gagal.");
+console.log("Record vina-hendri diperbarui in-place; jumlah record aktif tetap 1.");

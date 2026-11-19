@@ -1,0 +1,25 @@
+export type PhotoPresentation = { zoom: number; rotation: number; x: number; y: number };
+export type ResponsivePhotoPresentation = { mobile?: PhotoPresentation; desktop?: PhotoPresentation };
+export type GalleryImage = { src: string; alt: string; position?: string; presentation?: ResponsivePhotoPresentation };
+export type Person = { fullName: string; shortName: string; childOrderLabel?: string; parents: string; fatherName?: string; motherName?: string; instagram?: string; image: string };
+export type LoveStoryItem = { id?: string; year: string; title: string; description: string; image?: string };
+export type WeddingEvent = { id: "akad" | "reception"; title: string; day?: string; date: string; time: string; startTime?: string; endTime?: string; venue: string; address: string; mapsUrl: string; mapsEmbedUrl?: string; panoramaId?: string; calendar: { start: string; end: string; timezone: string; description: string } };
+export type Wish = { id: string; name: string; message: string; date: string };
+export type RsvpPayload = { name: string; recipientId?: string; attendance: "hadir" | "tidak"; guests: number; message?: string; submissionId: string; startedAt: number; website?: string };
+export type WishPayload = { name: string; message: string; submissionId: string; startedAt: number; website?: string };
+export type WeddingConfig = {
+  dataStatus: { ready: boolean; marker: "TODO_REAL_DATA"; required: string[] };
+  slug: string; couple: { first: string; second: string; display: string }; groom: Person; bride: Person;
+  guest: { fallbackName: string; maxLength: number }; weddingDate: string | null; dateLabel: string; events: WeddingEvent[]; venues: { akad: string; reception: string };
+  quotes: { opening: { text: string; source: string }; divider: string; closing: string; thankYou: string };
+  loveStory: LoveStoryItem[];
+  assets: { cover: string; hero: string; groomProfile: string; brideProfile: string; editorial: string; divider: string; closing: string; ogImage: string };
+  mediaPresentation?: Partial<Record<"cover" | "hero" | "bride" | "groom" | "divider" | "closing" | "og", ResponsivePhotoPresentation>>;
+  gallery: GalleryImage[];
+  gift: { enabled: boolean; intro: string; emptyMessage: string; accounts: { type: "bank" | "ewallet"; provider: string; number: string; holder: string }[] };
+  music: { enabled: boolean; src: string; title: string; artist?: string; loop: boolean }; socialLinks: { instagram?: string };
+  metadata: { title: string; description: string; ogTitle: string; ogDescription: string; siteUrl: string; canonicalUrl: string; weddingUrl: string; shareUrl: string; locale: string };
+  rsvp: { enabled: boolean; maxGuests: number; maxNameLength: number; maxMessageLength: number; minSubmitMs: number };
+  wishes: { enabled: boolean; pageSize: number; maxNameLength: number; maxMessageLength: number; minSubmitMs: number; emptyMessage: string };
+  theme: { primary: string; dark: string; accent: string; cream: string; gold: string; softWhite: string; text: string };
+};

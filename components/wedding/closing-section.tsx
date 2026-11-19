@@ -1,0 +1,8 @@
+"use client";
+import { SlowZoomImage } from "@/components/animations/motion-images";
+import { GoldParticles } from "@/components/animations/gold-particles";
+import type { WeddingConfig } from "@/types/wedding";
+
+export function ClosingSection({ config }: { config: WeddingConfig }) {
+  return <><section className="relative flex min-h-[82svh] items-end overflow-hidden bg-[var(--w-dark)] px-6 pb-[calc(8rem+env(safe-area-inset-bottom))] pt-28 text-center text-white lg:min-h-[min(820px,88svh)] lg:px-14 lg:pb-24 lg:pt-24"><SlowZoomImage direction="out" src={config.assets.closing} presentation={config.mediaPresentation?.closing} alt={`Penutup pernikahan ${config.couple.display}`} sizes="100vw" /><div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(35,8,14,.18),rgba(35,8,14,.92)_80%)] lg:bg-[linear-gradient(90deg,rgba(35,8,14,.88),rgba(35,8,14,.2)_58%,rgba(35,8,14,.45))]" /><GoldParticles active /><div className="relative z-10 mx-auto max-w-2xl lg:mx-0 lg:max-w-3xl lg:text-left"><div aria-hidden className="mx-auto mb-7 h-px w-16 bg-[var(--w-gold)]/45 lg:mx-0" /><p className="leading-7 text-white/75 lg:max-w-2xl lg:text-lg lg:leading-8">{config.quotes.closing}</p><p className="mt-6 text-sm text-[var(--w-gold-soft)]">{config.quotes.thankYou}</p><h2 className="font-serif-display mt-3 text-6xl leading-none lg:text-8xl">{config.couple.first} <span className="italic text-[var(--w-gold-soft)]">&</span> {config.couple.second}</h2></div></section><footer className="bg-[var(--w-text)] px-6 py-8 text-center text-xs tracking-wide text-white/45">Undangan Pernikahan · {config.couple.display}</footer></>;
+}

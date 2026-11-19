@@ -1,0 +1,3 @@
+import { AdminPage } from "@/components/admin/admin-shell";
+import { supabaseAdminAdapter } from "@/services/adapters/supabase-admin-adapter";
+export default async function ActivityPage() { const events = await supabaseAdminAdapter.listEvents().catch(() => []); return <AdminPage eyebrow="SECURITY" title="Aktivitas Keamanan"><div className="space-y-3">{events.map((event, index) => <article key={`${event.created_at}-${index}`} className="rounded-xl bg-white p-4"><p className="font-semibold">{event.event_type}</p><p className="text-sm text-[#6A565A]">{event.success ? "Berhasil" : "Ditolak"} · {new Date(event.created_at).toLocaleString("id-ID")}</p></article>)}</div></AdminPage>; }

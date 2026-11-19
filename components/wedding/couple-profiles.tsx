@@ -1,0 +1,20 @@
+"use client";
+import { motion } from "framer-motion";
+import { RevealImage } from "@/components/animations/motion-images";
+import type { Person, ResponsivePhotoPresentation, WeddingConfig } from "@/types/wedding";
+import { SectionHeading } from "./section-heading";
+import { childOrderText, instagramUrl, normalizeInstagram } from "@/lib/wedding-profile";
+
+function InstagramIcon() { return <svg aria-hidden viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".75" fill="currentColor" stroke="none" /></svg>; }
+
+function Profile({ person, kind, role, position, presentation }: { person: Person; kind: "bride" | "groom"; role: string; position: string; presentation?: ResponsivePhotoPresentation }) {
+  const username = normalizeInstagram(person.instagram);
+  return <article className="grid gap-7 sm:grid-cols-[minmax(0,1fr)_minmax(0,.8fr)] sm:items-center sm:gap-12 lg:grid-cols-1 lg:content-start lg:gap-8">
+    <motion.div className="relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-t-[48%] border border-[var(--w-gold)]/50 bg-[var(--w-divider)] p-2 lg:max-w-[28rem]" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }}><div className="relative h-full overflow-hidden rounded-t-[48%]"><RevealImage src={person.image} presentation={presentation} alt={person.fullName} sizes="(max-width: 640px) 90vw, 40vw" objectPosition={position} /></div><span aria-hidden className="absolute -right-5 top-1/3 h-28 w-28 rounded-full border border-[var(--w-gold)]/30" /></motion.div>
+    <motion.div className="text-center sm:text-left lg:text-center" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: .15 }}><p className="text-[.68rem] uppercase tracking-[.3em] text-[var(--w-accent)]">{role}</p><h3 className="font-serif-display mt-3 text-4xl text-[var(--w-dark)] sm:text-5xl">{person.fullName}</h3>{person.shortName?.trim() && <p className="mt-2 text-sm italic text-[var(--w-muted-4)]">Akrab dikenal sebagai <span className="font-semibold not-italic text-[var(--w-primary)]">{person.shortName.trim()}</span></p>}<div className="mt-5 leading-7 text-[var(--w-muted-2)]"><p>{childOrderText(person.childOrderLabel, kind)}</p>{person.fatherName || person.motherName ? <><p className="font-medium">{person.fatherName ? `Bapak ${person.fatherName}` : ""}</p>{person.fatherName && person.motherName && <p aria-hidden className="text-[var(--w-muted-3)]">&amp;</p>}<p className="font-medium">{person.motherName ? `Ibu ${person.motherName}` : ""}</p></> : <p>{person.parents}</p>}</div>{username && <a href={instagramUrl(username)} target="_blank" rel="noopener noreferrer" aria-label={`Instagram ${person.fullName}, @${username}`} className="mt-4 inline-flex min-h-10 items-center gap-2 rounded-full border border-[var(--w-primary)]/15 bg-[var(--w-primary)]/[.035] px-3.5 text-sm text-[var(--w-primary)] transition hover:border-[var(--w-primary)]/30 hover:bg-[var(--w-primary)]/[.08] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--w-primary)]"><InstagramIcon /> <span>@{username}</span></a>}</motion.div>
+  </article>;
+}
+
+export function CoupleProfiles({ groom, bride, mediaPresentation }: { groom: Person; bride: Person; mediaPresentation?: WeddingConfig["mediaPresentation"] }) {
+  return <section className="bg-[var(--w-soft-white)] px-6 py-24 sm:py-32 lg:px-12 lg:py-28"><div className="mx-auto max-w-6xl"><SectionHeading eyebrow="Bride & Groom" title="Dua hati, satu tujuan" /><div className="space-y-24 lg:grid lg:grid-cols-2 lg:gap-16 lg:space-y-0"><Profile person={groom} kind="groom" role="Mempelai Pria" position="31% 50%" presentation={mediaPresentation?.groom} /><Profile person={bride} kind="bride" role="Mempelai Wanita" position="72% 45%" presentation={mediaPresentation?.bride} /></div></div></section>;
+}

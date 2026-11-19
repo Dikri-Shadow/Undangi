@@ -1,0 +1,5 @@
+import { notFound } from "next/navigation";
+import { RsvpResults } from "@/components/admin/rsvp-results";
+import { getAdminWedding } from "@/services/admin-wedding-loader";
+import { listAdminRsvpForWedding } from "@/services/admin-responses-service";
+export default async function InvitationRsvpPage({ params }: { params: Promise<{ id: string }> }) { const record = await getAdminWedding((await params).id); if (!record) notFound(); const result = await listAdminRsvpForWedding(record.slug).then((rows) => ({ rows, failed: false })).catch(() => ({ rows: [], failed: true })); return <main className="mx-auto max-w-6xl p-4 sm:p-6 lg:p-8"><div className="mb-5"><h2 className="text-2xl font-bold">RSVP</h2><p className="mt-1 text-sm text-[#746b6d]">Konfirmasi kehadiran untuk undangan ini saja.</p></div>{result.failed && <p role="alert" className="mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">Data RSVP belum dapat dimuat. Muat ulang halaman untuk mencoba lagi.</p>}<RsvpResults rows={result.rows} weddings={[{ slug: record.slug, label: record.weddingData.couple.display }]} /></main>; }

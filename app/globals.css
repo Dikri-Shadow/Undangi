@@ -1,0 +1,42 @@
+@import "tailwindcss/index.css";
+:root { --background: #fff9f5; --foreground: #261719; --burgundy: #6f1d2a; --burgundy-dark: #3d0f18; --burgundy-accent: #8b2635; --cream: #f7efe7; --gold: #c9a66b; color-scheme: light; }
+/* Palet undangan sebagai variabel (--w-*) agar halaman demo (/demo) bisa
+   menampilkan satu undangan yang sama dalam 5 tema berbeda. Nilai default
+   SAMA PERSIS dengan warna burgundy lama, jadi undangan live (vina-hendri)
+   tidak berubah tampilannya. Variabel tema lama di atas tidak diubah. */
+:root { --w-primary: var(--burgundy); --w-dark: var(--burgundy-dark); --w-accent: var(--burgundy-accent); --w-cream: var(--cream); --w-gold: var(--gold); --w-gold-soft: #d9ba82; --w-soft-white: var(--background); --w-text: var(--foreground); --w-muted: #684d51; --w-muted-2: #563c40; --w-gold-light: #e2c48b; --w-gold-pale: #d7b980; --w-divider: #e9ddd1; --w-deep: #18070b; --w-muted-3: #9b7a7f; --w-muted-4: #7a5b60; }
+@theme inline { --font-sans: var(--font-body); --font-serif: var(--font-display); --color-background: var(--background); --color-foreground: var(--foreground); }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--burgundy-dark); }
+body { margin: 0; background: var(--background); color: var(--foreground); font-family: var(--font-body), sans-serif; overflow-x: hidden; }
+html.gate-locked, body.gate-locked, body.lightbox-open { overflow: hidden; scrollbar-width: none; }
+html.gate-locked::-webkit-scrollbar, body.gate-locked::-webkit-scrollbar { display: none; }
+.font-serif-display { font-family: var(--font-display), Georgia, serif; }
+/* Blush Sakura — hanya untuk landing, dashboard customer, dan admin.
+   Undangan live tetap memakai .font-serif-display / --font-display. */
+.font-blush-display { font-family: var(--font-blush-display), Georgia, serif; }
+.font-blush-body { font-family: var(--font-blush-body), sans-serif; }
+::selection { background: #6f1d2a; color: #fff9f5; }
+button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+.marketing-preview { animation: marketing-preview-float 8s ease-in-out infinite; }
+@keyframes marketing-preview-float { 0%, 100% { transform: translate3d(0, 0, 0) rotate(-.35deg); } 50% { transform: translate3d(0, -7px, 0) rotate(.35deg); } }
+@keyframes admin-drawer-in { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@keyframes admin-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+@media (orientation: landscape) and (max-height: 520px) {
+  .gate-content { max-width: 48rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; padding-block: 1rem; }
+  .gate-title h1 { font-size: clamp(3.3rem, 10vw, 5rem); }
+  .gate-guest > div:first-child { margin-block: 0 1rem; }
+  .gate-guest > p:nth-of-type(2) { margin-top: .65rem; line-height: 1.45; }
+  .gate-guest button { margin-top: 1rem; }
+  .gate-guest > p:last-child { margin-top: .7rem; }
+}
+@media (min-width: 1024px) {
+  #rsvp > div { max-width: 42rem; }
+  #rsvp > div > form { padding: 3rem; }
+  #rsvp + section > div { max-width: 70rem; }
+  #rsvp + section > div > form { grid-template-columns: minmax(13rem, .75fr) minmax(22rem, 1.5fr) auto; padding: 1.75rem; }
+  #rsvp + section > div > form ~ div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem; }
+  #rsvp + section > div > form ~ div > * { margin-top: 0; }
+}
